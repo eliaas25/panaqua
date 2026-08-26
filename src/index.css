@@ -1,0 +1,63 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg: #fafaf8;
+  --color-text: #1a1a1a;
+  --color-accent: #c9a96e;
+  --color-muted: #6b6b6b;
+  --color-border: #e5e5e5;
+  --color-accent-light: #d4b87a;
+  --color-accent-dark: #b89a5f;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Cormorant Garamond', serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text font-body m-0 p-0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white px-6 py-3 rounded-sm font-body font-medium 
+           hover:bg-accent-dark transition-colors duration-300 
+           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply border border-accent text-accent px-6 py-3 rounded-sm font-body font-medium 
+           hover:bg-accent hover:text-white transition-colors duration-300
+           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white border border-border rounded-sm overflow-hidden 
+           hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-4xl text-text mb-4;
+  }
+
+  .section-subtitle {
+    @apply font-accent text-lg text-muted italic;
+  }
+}
