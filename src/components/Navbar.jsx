@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import logo from '../assets/logo.svg';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <a href="#" className="flex items-center gap-3">
               <img
-                src="/logo.svg"
+                src={logo}
                 alt="Panaqua"
                 className="h-10 md:h-12"
                 onError={(e) => {

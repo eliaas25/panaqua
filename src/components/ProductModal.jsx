@@ -1,3 +1,5 @@
+import { whatsappLink } from '../config/site';
+
 export default function ProductModal({ product, onClose }) {
   if (!product) return null;
 
@@ -94,7 +96,7 @@ export default function ProductModal({ product, onClose }) {
 
             <div className="flex flex-col sm:flex-row gap-3">
               <a
-                href={`https://wa.me/5493415603310?text=Hola! Me interesa ${product.name}`}
+                href={whatsappLink(`Hola! Me interesa ${product.name}`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary text-center flex-1"
