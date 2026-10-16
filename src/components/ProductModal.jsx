@@ -58,23 +58,27 @@ export default function ProductModal({ product, onClose }) {
             </div>
 
             <div className="space-y-4 mb-8">
-              <div>
-                <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                  Materiales
-                </h4>
-                <ul className="font-body text-sm text-muted">
-                  {product.materials.map((material, index) => (
-                    <li key={index}>• {material}</li>
-                  ))}
-                </ul>
-              </div>
+              {product.materials.length > 0 && (
+                <div>
+                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
+                    Materiales
+                  </h4>
+                  <ul className="font-body text-sm text-muted">
+                    {product.materials.map((material, index) => (
+                      <li key={index}>• {material}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-              <div>
-                <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                  Dimensiones
-                </h4>
-                <p className="font-body text-sm text-muted">{product.dimensions}</p>
-              </div>
+              {product.dimensions && (
+                <div>
+                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
+                    Dimensiones
+                  </h4>
+                  <p className="font-body text-sm text-muted">{product.dimensions}</p>
+                </div>
+              )}
 
               <div>
                 <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
