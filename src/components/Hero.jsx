@@ -1,3 +1,5 @@
+import bagFlower from '../assets/products/bag-flower.jpeg';
+
 export default function Hero() {
   return (
     <section className="min-h-screen flex items-center pt-20">
@@ -26,8 +28,8 @@ export default function Hero() {
           <div className="order-1 md:order-2 relative">
             <div className="aspect-[4/5] rounded-sm overflow-hidden shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=80"
-                alt="Cartera elegante Panaqua"
+                src={bagFlower}
+                alt="Bag Flower Panaqua"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -40,11 +42,11 @@ export default function Hero() {
         {/* Stats */}
         <div className="mt-16 md:mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <p className="font-display text-3xl md:text-4xl text-accent">10+</p>
+            <p className="font-display text-3xl md:text-4xl text-accent">6</p>
             <p className="font-body text-sm text-muted uppercase tracking-wider">Productos</p>
           </div>
           <div>
-            <p className="font-display text-3xl md:text-4xl text-accent">4</p>
+            <p className="font-display text-3xl md:text-4xl text-accent">2</p>
             <p className="font-body text-sm text-muted uppercase tracking-wider">Categorías</p>
           </div>
           <div>
