@@ -21,7 +21,7 @@ export default function Navbar() {
               <img
                 src={logo}
                 alt="Panaqua"
-                className="h-10 md:h-12"
+                className="h-23"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'block';
