@@ -1,4 +1,4 @@
-import bagFlower from '../assets/products/bag-flower.jpeg';
+import bagFlower from '../assets/products/bag-flower.webp';
 
 export default function Hero() {
   return (

@@ -1,9 +1,9 @@
-import bagIsadora from '../assets/products/bag-isadora.jpeg';
-import bagTini from '../assets/products/bag-tini.jpeg';
-import bolsoKaren from '../assets/products/bolso-karen.jpeg';
-import bagFlower from '../assets/products/bag-flower.jpeg';
-import bolsoMindy from '../assets/products/bolso-mindy.jpeg';
-import bagVirkin from '../assets/products/bag-virkin.jpeg';
+import bagIsadora from '../assets/products/bag-isadora.webp';
+import bagTini from '../assets/products/bag-tini.webp';
+import bolsoKaren from '../assets/products/bolso-karen.webp';
+import bagFlower from '../assets/products/bag-flower.webp';
+import bolsoMindy from '../assets/products/bolso-mindy.webp';
+import bagVirkin from '../assets/products/bag-virkin.webp';
 
 export const products = [
   {
