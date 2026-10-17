@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProductGrid from './components/ProductGrid';
 import CategoryFilter from './components/CategoryFilter';
+import CatalogControls from './components/CatalogControls';
+import { sortProducts } from './utils/sort';
 import ProductModal from './components/ProductModal';
 import About from './components/About';
 import Contact from './components/Contact';
@@ -13,10 +15,17 @@ import { products, categories } from './data/products';
 function App() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('default');
 
-  const filteredProducts = activeCategory
-    ? products.filter((product) => product.category === activeCategory)
-    : products;
+  const filteredProducts = sortProducts(
+    products.filter((product) => {
+      const matchesCategory = activeCategory ? product.category === activeCategory : true;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase().trim());
+      return matchesCategory && matchesSearch;
+    }),
+    sortBy
+  );
 
   return (
     <div className="min-h-screen bg-bg">
@@ -39,13 +48,21 @@ function App() {
             </div>
 
             {/* Category Filter */}
-            <div className="mb-12">
+            <div className="mb-10">
               <CategoryFilter
                 categories={categories}
                 activeCategory={activeCategory}
                 onCategoryChange={setActiveCategory}
               />
             </div>
+
+            {/* Search & Sort */}
+            <CatalogControls
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+            />
 
             {/* Product Grid */}
             <ProductGrid products={filteredProducts} onProductClick={setSelectedProduct} />
