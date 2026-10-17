@@ -11,13 +11,15 @@ npm install
 
 ### 2. Configurar Variables de Entorno
 
-Crea un archivo `.env` en la raíz del proyecto con:
+Crea un archivo `.env` en la raíz del proyecto (basado en `.env.example`):
 
 ```
 VITE_WHATSAPP_NUMBER=549XXXXXXXXXX
+VITE_CONTACT_EMAIL=tu@email.com
+VITE_INSTAGRAM_URL=https://www.instagram.com/tu-usuario
 ```
 
-Reemplaza `549XXXXXXXXXX` con tu número de WhatsApp real.
+Los valores se centralizan en `src/config/site.js` (con fallbacks). **No** editar números en componentes.
 
 ### 3. Iniciar Desarrollo
 
@@ -31,16 +33,13 @@ Esto abrirá el servidor de desarrollo en `http://localhost:5173/`
 
 ### Cambiar Logo
 
-1. Coloca tu logo en `public/logo.svg`
-2. El Navbar lo cargará automáticamente
+- Logo: `src/assets/logo.svg` (usado por el Navbar)
+- Favicon: `public/favicon.svg`
 
-### Cambiar Número de WhatsApp
+### Cambiar Contacto (WhatsApp / email / Instagram)
 
-1. Abre `src/components/WhatsAppButton.jsx`
-2. Reemplaza `549XXXXXXXXXX` con tu número real
-
-3. Abre `src/components/ProductModal.jsx`
-4. Actualiza el número en el enlace de WhatsApp
+1. Editá `.env` (o los fallbacks en `src/config/site.js`)
+2. Los componentes lo toman automáticamente
 
 ### Cambiar Colores
 
@@ -64,14 +63,14 @@ Esto abrirá el servidor de desarrollo en `http://localhost:5173/`
 
 ```javascript
 {
-  id: 11,
+  id: 7,
   name: "Nombre del Producto",
-  category: "categoría", // "carteras de mano", "bolsos", "bolsos gabardina", "mini bag"
+  category: "bags", // "bags" o "bolsos"
   price: 25000,
-  materials: ["Material 1", "Material 2"],
-  dimensions: "30cm x 20cm x 12cm",
+  materials: [],
+  dimensions: "",
   availability: "En stock", // "En stock", "Pocas unidades", "Agotado"
-  image: "URL de la imagen",
+  image: importFoto, // import desde src/assets/products/
   description: "Descripción del producto",
   featured: false
 }
@@ -79,8 +78,8 @@ Esto abrirá el servidor de desarrollo en `http://localhost:5173/`
 
 ### Cambiar Imágenes
 
-1. Coloca tus imágenes en `src/assets/images/`
-2. Actualiza las URLs en `src/data/products.js`
+1. Coloca tus imágenes en `src/assets/products/`
+2. Importalas por ESM en `src/data/products.js` (no URLs externas)
 
 ## Comandos Útiles
 
@@ -102,24 +101,19 @@ npm run format:check
 
 # Ejecutar linting
 npm run lint
+
+# Ejecutar tests (27 tests)
+npm test
+
+# Tests en modo watch
+npm run test:watch
 ```
 
 ## Deploy
 
-### Opción 1: GitHub Pages (Recomendado)
+Push a `main` → GitHub Actions ejecuta lint + tests + build + deploy automático a GitHub Pages.
 
-1. Sube el código a GitHub
-2. Ve a Settings > Pages
-3. Selecciona "GitHub Actions" como source
-4. El deploy se ejecutará automáticamente
-
-### Opción 2: Netlify
-
-1. Sube el código a GitHub
-2. Conecta el repositorio en Netlify
-3. Configura:
-   - Build command: `npm run build`
-   - Publish directory: `dist`
+Settings > Pages > Source: "GitHub Actions" (ya configurado).
 
 ## Estructura del Proyecto
 
@@ -127,16 +121,19 @@ npm run lint
 panaqua/
 ├── public/
 │   ├── favicon.svg
-│   └── logo.svg          # Tu logo aquí
+│   └── images/og-image.jpg
 ├── src/
-│   ├── components/       # Componentes React
-│   ├── data/             # Datos de productos
-│   ├── assets/
-│   │   └── images/       # Tus imágenes aquí
+│   ├── components/       # 11 componentes React
+│   ├── config/site.js    # contacto centralizado
+│   ├── data/products.js  # 6 productos + 2 categorías
+│   ├── utils/            # sort.js, format.js
+│   ├── assets/           # logo.svg + 6 fotos
+│   ├── test/             # 6 archivos de test
 │   ├── App.jsx
 │   ├── main.jsx
 │   └── index.css
-├── .env                  # Variables de entorno
+├── .env                  # Variables de entorno (gitignored)
+├── .env.example          # Plantilla
 ├── package.json
 └── vite.config.js
 ```

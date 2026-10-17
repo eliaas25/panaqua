@@ -1,14 +1,8 @@
 import { whatsappLink } from '../config/site';
+import { formatPrice } from '../utils/format';
 
 export default function ProductModal({ product, onClose }) {
   if (!product) return null;
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-    }).format(price);
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

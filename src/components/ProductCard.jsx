@@ -1,11 +1,6 @@
-export default function ProductCard({ product, onProductClick }) {
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-    }).format(price);
-  };
+import { formatPrice } from '../utils/format';
 
+export default function ProductCard({ product, onProductClick }) {
   const getAvailabilityColor = (availability) => {
     switch (availability) {
       case 'En stock':

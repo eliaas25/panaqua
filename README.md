@@ -1,123 +1,123 @@
 # Panaqua - Carteras y Bolsos Elegantes
 
-Sitio web para mostrar productos de carteras y bolsos elegantes.
+Catálogo online de carteras y bolsos. **[Live](https://eliaas25.github.io/panaqua/)**
 
 ## Características
 
-- Diseño elegante y minimalista
-- Catálogo de productos con filtros por categoría
-- Modal de detalles de producto
+- Diseño elegante y minimalista (dorado + blancos cálidos)
+- Catálogo de 6 productos con búsqueda y ordenamiento
+- Filtro por categorías (Bags / Bolsos)
+- Modal de detalles con consulta directa por WhatsApp
 - Responsive design (mobile-first)
-- Sección de contacto con WhatsApp
-- Integración con redes sociales
+- 27 tests automatizados + CI/CD con GitHub Actions
 
 ## Tecnologías
 
-- React + Vite
-- Tailwind CSS
+- React 19 + Vite 8
+- Tailwind CSS 4 (via `@theme`, sin config JS)
+- Vitest + React Testing Library (tests)
+- oxlint + Prettier (linting y formato)
 - Google Fonts (Playfair Display, Inter, Cormorant Garamond)
 
-## Categorías de Productos
+## Categorías
 
-- Carteras de Mano
-- Bolsos
-- Bolsos Gabardina
-- Mini Bags
+- **Bags** (4 productos)
+- **Bolsos** (2 productos)
 
 ## Instalación
 
 ```bash
-# Instalar dependencias
 npm install
-
-# Iniciar servidor de desarrollo
-npm run dev
-
-# Construir para producción
-npm run build
-
-# Vista previa de producción
-npm run preview
+npm run dev          # localhost:5173
 ```
+
+## Comandos
+
+```bash
+npm run dev          # Servidor de desarrollo
+npm run build        # Build de producción
+npm run preview      # Vista previa del build
+npm test             # Correr tests (27 tests)
+npm run test:watch   # Tests en modo watch
+npm run lint         # Linting con oxlint
+npm run format       # Formatear con Prettier
+```
+
+## Variables de Entorno
+
+Crea un archivo `.env` (gitignored) basado en `.env.example`:
+
+```
+VITE_WHATSAPP_NUMBER=549XXXXXXXXXX
+VITE_CONTACT_EMAIL=tu@email.com
+VITE_INSTAGRAM_URL=https://www.instagram.com/tu-usuario
+```
+
+> Los valores reales están centralizados en `src/config/site.js` (con fallbacks). **No** editar números en componentes.
 
 ## Estructura del Proyecto
 
 ```
 src/
-├── components/
-│   ├── Navbar.jsx
-│   ├── Hero.jsx
-│   ├── ProductCard.jsx
-│   ├── ProductGrid.jsx
-│   ├── CategoryFilter.jsx
-│   ├── ProductModal.jsx
-│   ├── About.jsx
-│   ├── Contact.jsx
-│   ├── Footer.jsx
-│   └── WhatsAppButton.jsx
-├── data/
-│   └── products.js
-├── assets/
-│   └── images/
-├── App.jsx
+├── components/       # 11 componentes React (.jsx)
+├── config/site.js    # ← contacto centralizado (WhatsApp, email, Instagram)
+├── data/products.js  # 6 productos + 2 categorías
+├── utils/            # sort.js, format.js
+├── assets/           # logo.svg + 6 fotos de productos
+├── test/             # 6 archivos de test (Vitest)
+├── App.jsx           # orquestador (4 estados)
 ├── main.jsx
-└── index.css
+└── index.css         # @theme de Tailwind 4
 ```
 
 ## Personalización
 
+### Cambiar contacto (WhatsApp / email / Instagram)
+
+1. Editá `.env` (o los fallbacks en `src/config/site.js`)
+2. Los componentes (`Contact`, `Footer`, `WhatsAppButton`, `ProductModal`) lo toman automáticamente
+
 ### Cambiar Logo
 
-1. Coloca tu logo en `public/logo.svg`
-2. El componente Navbar lo cargará automáticamente
-
-### Cambiar Número de WhatsApp
-
-1. Abre `src/components/WhatsAppButton.jsx`
-2. Reemplaza `549XXXXXXXXXX` con tu número real
-
-3. Abre `src/components/ProductModal.jsx`
-4. Actualiza el número en el enlace de WhatsApp
+- Logo: `src/assets/logo.svg` (optimizado con SVGO, ~24 KB)
+- Favicon: `public/favicon.svg`
 
 ### Cambiar Colores
 
-1. Abre `src/index.css`
-2. Modifica las variables en la sección `@theme`
+1. Abrí `src/index.css`
+2. Modificá las variables en `@theme`
 
 ### Agregar Productos
 
-1. Abre `src/data/products.js`
-2. Agrega nuevos objetos al array `products`
-3. Formato:
+1. Abrí `src/data/products.js`
+2. Agregá un objeto al array `products`:
+
 ```javascript
 {
-  id: 11,
-  name: "Nombre del Producto",
-  category: "categoría",
+  id: 7,
+  name: "Nombre",
+  category: "bags",        // o "bolsos"
   price: 25000,
-  materials: ["Material 1", "Material 2"],
-  dimensions: "30cm x 20cm x 12cm",
+  materials: [],
+  dimensions: "",
   availability: "En stock",
-  image: "URL de la imagen",
-  description: "Descripción del producto",
+  image: importFoto,       // import de src/assets/products/
+  description: "Texto...",
   featured: false
 }
 ```
 
-## Imágenes
+## Deploy
 
-El proyecto usa imágenes de ejemplo de Unsplash. Para reemplazarlas:
+Push a `main` → GitHub Actions corre lint + tests → build → deploy automático a GitHub Pages.
 
-1. Coloca tus imágenes en `src/assets/images/`
-2. Actualiza las URLs en `src/data/products.js`
+## Próximos Pasos (Fase 2)
 
-## Próximos Pasos
-
-- [ ] Agregar carrito de compras
-- [ ] Integrar pasarela de pagos (Mercado Pago)
+- [ ] Carrito de compras
+- [ ] Integración con Mercado Pago
 - [ ] Sistema de envíos
 - [ ] Panel de administración
-- [ ] Base de datos para gestionar ventas y stock
+- [ ] Base de datos para stock y ventas
 
 ## Licencia
 
