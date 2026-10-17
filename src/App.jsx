@@ -10,6 +10,8 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
+import CartDrawer from './components/CartDrawer';
+import { CartProvider } from './context/CartContext';
 import { products, categories } from './data/products';
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const filteredProducts = sortProducts(
     products.filter((product) => {
@@ -28,62 +31,65 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-bg">
-      <Navbar />
+    <CartProvider>
+      <div className="min-h-screen bg-bg">
+        <Navbar onCartOpen={() => setIsCartOpen(true)} />
 
-      <main>
-        {/* Hero Section */}
-        <Hero />
+        <main>
+          {/* Hero Section */}
+          <Hero />
 
-        {/* Catalog Section */}
-        <section id="catalogo" className="py-20">
-          <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="font-display text-3xl md:text-4xl text-text mb-4">
-                Nuestros Productos
-              </h2>
-              <p className="font-accent text-lg text-muted italic">
-                Descubrí la perfección en cada detalle
-              </p>
+          {/* Catalog Section */}
+          <section id="catalogo" className="py-20">
+            <div className="container-custom">
+              <div className="text-center mb-12">
+                <h2 className="font-display text-3xl md:text-4xl text-text mb-4">
+                  Nuestros Productos
+                </h2>
+                <p className="font-accent text-lg text-muted italic">
+                  Descubrí la perfección en cada detalle
+                </p>
+              </div>
+
+              {/* Filters + Search + Sort in one line */}
+              <div className="flex flex-wrap justify-center items-center gap-3 md:gap-4 mb-10">
+                <CategoryFilter
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  onCategoryChange={setActiveCategory}
+                />
+                <CatalogControls
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                />
+              </div>
+
+              {/* Product Grid */}
+              <ProductGrid products={filteredProducts} onProductClick={setSelectedProduct} />
             </div>
+          </section>
 
-            {/* Category Filter */}
-            <div className="mb-10">
-              <CategoryFilter
-                categories={categories}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-              />
-            </div>
+          {/* About Section */}
+          <About />
 
-            {/* Search & Sort */}
-            <CatalogControls
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-            />
+          {/* Contact Section */}
+          <Contact />
+        </main>
 
-            {/* Product Grid */}
-            <ProductGrid products={filteredProducts} onProductClick={setSelectedProduct} />
-          </div>
-        </section>
+        <Footer />
 
-        {/* About Section */}
-        <About />
+        {/* Product Modal */}
+        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
 
-        {/* Contact Section */}
-        <Contact />
-      </main>
+        {/* Cart Drawer */}
+        <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
-      <Footer />
-
-      {/* Product Modal */}
-      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-
-      {/* WhatsApp Button */}
-      <WhatsAppButton />
-    </div>
+        {/* WhatsApp Button */}
+        <WhatsAppButton />
+      </div>
+    </CartProvider>
   );
 }
 

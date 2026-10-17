@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import logo from '../assets/logo.svg';
+import { useCart } from '../hooks/useCart';
 
-export default function Navbar() {
+export default function Navbar({ onCartOpen }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalItems } = useCart();
 
   const navItems = [
     { name: 'Inicio', href: '#' },
@@ -46,30 +48,52 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-text hover:text-accent transition-colors"
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isOpen ? (
+          {/* Cart + Mobile menu */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={onCartOpen}
+              className="relative p-2 text-text hover:text-accent transition-colors"
+              aria-label="Abrir carrito"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                 />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              </svg>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-white font-body text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
               )}
-            </svg>
-          </button>
+            </button>
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 text-text hover:text-accent transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}

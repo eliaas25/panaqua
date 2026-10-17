@@ -26,7 +26,7 @@ export default function Hero() {
 
           {/* Hero Image */}
           <div className="order-1 md:order-2 relative">
-            <div className="aspect-[4/5] rounded-sm overflow-hidden shadow-2xl">
+            <div className="aspect-[4/5] max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-sm overflow-hidden shadow-2xl">
               <img
                 src={bagFlower}
                 alt="Bag Flower Panaqua"

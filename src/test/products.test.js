@@ -14,7 +14,8 @@ describe('products data', () => {
       expect(product.price).toBeGreaterThan(0);
       expect(product.image).toBeTruthy();
       expect(product.description).toBeTruthy();
-      expect(product.availability).toBeTruthy();
+      expect(typeof product.stock).toBe('number');
+      expect(product.stock).toBeGreaterThanOrEqual(0);
     });
   });
 

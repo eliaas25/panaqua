@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { whatsappLink, whatsappDisplay, contactEmail, instagramUrl } from '../config/site';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const { copied: emailCopied, copy: copyEmail } = useCopyToClipboard();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,6 +15,11 @@ export default function Contact() {
     const text = `Hola! Mi nombre es ${form.name} (${form.email}).\n\n${form.message}`;
     window.open(whatsappLink(text), '_blank', 'noopener,noreferrer');
     setForm({ name: '', email: '', message: '' });
+  };
+
+  const handleCopyEmail = async () => {
+    const ok = await copyEmail(contactEmail);
+    if (!ok) window.location.href = `mailto:${contactEmail}`;
   };
 
   return (
@@ -49,8 +56,9 @@ export default function Contact() {
               <h3 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-4">
                 Email
               </h3>
-              <a
-                href={`mailto:${contactEmail}`}
+              <button
+                type="button"
+                onClick={handleCopyEmail}
                 className="flex items-center gap-3 text-text hover:text-accent transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,8 +69,10 @@ export default function Contact() {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="font-body text-lg">{contactEmail}</span>
-              </a>
+                <span className="font-body text-lg">
+                  {emailCopied ? '¡Copiado!' : contactEmail}
+                </span>
+              </button>
             </div>
 
             <div>

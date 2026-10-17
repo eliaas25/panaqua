@@ -52,6 +52,21 @@ describe('Contact', () => {
     expect(url).toContain(encodeURIComponent('juan@test.com'));
   });
 
+  it('copies email to clipboard on click and shows feedback', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+    render(<Contact />);
+
+    await user.click(screen.getByRole('button', { name: /panaqua3@gmail\.com/ }));
+
+    expect(writeText).toHaveBeenCalledWith('panaqua3@gmail.com');
+    expect(screen.getByRole('button', { name: /copiado/i })).toBeInTheDocument();
+  });
+
   it('clears form fields after successful submit', async () => {
     vi.spyOn(window, 'open').mockImplementation(() => {});
     const user = userEvent.setup();

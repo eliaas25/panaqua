@@ -1,7 +1,9 @@
 import { whatsappDisplay, contactEmail, instagramUrl } from '../config/site';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { copied: emailCopied, copy: copyEmail } = useCopyToClipboard();
 
   return (
     <footer className="bg-text text-white py-12">
@@ -73,7 +75,16 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 font-body text-white/70">
               <li>WhatsApp: {whatsappDisplay}</li>
-              <li>Email: {contactEmail}</li>
+              <li>
+                Email:{' '}
+                <button
+                  type="button"
+                  onClick={() => copyEmail(contactEmail)}
+                  className="hover:text-accent transition-colors"
+                >
+                  {emailCopied ? '¡Copiado!' : contactEmail}
+                </button>
+              </li>
               <li>Ventas online 24/7</li>
             </ul>
           </div>

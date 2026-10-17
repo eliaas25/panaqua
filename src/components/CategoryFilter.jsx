@@ -1,6 +1,6 @@
 export default function CategoryFilter({ categories, activeCategory, onCategoryChange }) {
   return (
-    <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+    <>
       <button
         onClick={() => onCategoryChange(null)}
         className={`px-4 py-2 rounded-sm font-body text-sm transition-all duration-300 ${
@@ -24,6 +24,6 @@ export default function CategoryFilter({ categories, activeCategory, onCategoryC
           {category.name}
         </button>
       ))}
-    </div>
+    </>
   );
 }

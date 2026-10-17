@@ -1,16 +1,25 @@
 import { whatsappLink } from '../config/site';
 import { formatPrice } from '../utils/format';
+import { getStockStatus } from '../utils/stock';
+import { useCart } from '../hooks/useCart';
 
 export default function ProductModal({ product, onClose }) {
+  const { addItem } = useCart();
+
   if (!product) return null;
+
+  const stockStatus = getStockStatus(product.stock);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-pointer"
+        onClick={onClose}
+      ></div>
 
       {/* Modal */}
-      <div className="relative bg-white rounded-sm max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div className="relative bg-white rounded-sm max-w-4xl w-full max-h-[90vh] flex flex-col">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -27,83 +36,86 @@ export default function ProductModal({ product, onClose }) {
           </svg>
         </button>
 
-        <div className="grid md:grid-cols-2">
-          {/* Image */}
-          <div className="aspect-square md:aspect-auto">
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-          </div>
-
-          {/* Content */}
-          <div className="p-6 md:p-8 overflow-y-auto">
-            <div className="mb-4">
-              <span className="font-body text-xs text-muted uppercase tracking-wider bg-bg px-3 py-1 rounded-sm">
-                {product.category}
-              </span>
+        <div className="overflow-y-auto">
+          <div className="grid md:grid-cols-2">
+            {/* Image */}
+            <div className="aspect-square md:aspect-auto">
+              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             </div>
 
-            <h2 className="font-display text-2xl md:text-3xl text-text mb-4">{product.name}</h2>
+            {/* Content */}
+            <div className="p-6 md:p-8">
+              <div className="mb-4">
+                <span className="font-body text-xs text-muted uppercase tracking-wider bg-bg px-3 py-1 rounded-sm">
+                  {product.category}
+                </span>
+              </div>
 
-            <p className="font-accent text-lg text-muted italic mb-6">{product.description}</p>
+              <h2 className="font-display text-2xl md:text-3xl text-text mb-4">{product.name}</h2>
 
-            <div className="mb-6">
-              <p className="font-body text-3xl font-semibold text-accent">
-                {formatPrice(product.price)}
-              </p>
-            </div>
+              <p className="font-accent text-lg text-muted italic mb-6">{product.description}</p>
 
-            <div className="space-y-4 mb-8">
-              {product.materials.length > 0 && (
-                <div>
-                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                    Materiales
-                  </h4>
-                  <ul className="font-body text-sm text-muted">
-                    {product.materials.map((material, index) => (
-                      <li key={index}>• {material}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {product.dimensions && (
-                <div>
-                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                    Dimensiones
-                  </h4>
-                  <p className="font-body text-sm text-muted">{product.dimensions}</p>
-                </div>
-              )}
-
-              <div>
-                <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                  Disponibilidad
-                </h4>
-                <p
-                  className={`font-body text-sm ${
-                    product.availability === 'En stock'
-                      ? 'text-green-600'
-                      : product.availability === 'Pocas unidades'
-                        ? 'text-yellow-600'
-                        : 'text-red-600'
-                  }`}
-                >
-                  {product.availability}
+              <div className="mb-6">
+                <p className="font-body text-3xl font-semibold text-accent">
+                  {formatPrice(product.price)}
                 </p>
               </div>
-            </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href={whatsappLink(`Hola! Me interesa ${product.name}`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary text-center flex-1"
-              >
-                Consultar por WhatsApp
-              </a>
-              <button className="btn-secondary text-center" onClick={onClose}>
-                Cerrar
-              </button>
+              <div className="space-y-4 mb-8">
+                {product.materials.length > 0 && (
+                  <div>
+                    <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
+                      Materiales
+                    </h4>
+                    <ul className="font-body text-sm text-muted">
+                      {product.materials.map((material, index) => (
+                        <li key={index}>• {material}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {product.dimensions && (
+                  <div>
+                    <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
+                      Dimensiones
+                    </h4>
+                    <p className="font-body text-sm text-muted">{product.dimensions}</p>
+                  </div>
+                )}
+
+                <div>
+                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
+                    Disponibilidad
+                  </h4>
+                  <p className={`font-body text-sm ${stockStatus.textColor}`}>
+                    {stockStatus.label}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => {
+                    addItem(product);
+                    onClose();
+                  }}
+                  disabled={!stockStatus.canBuy}
+                  className={`flex-1 text-center ${
+                    stockStatus.canBuy ? 'btn-primary' : 'btn-primary opacity-50 cursor-not-allowed'
+                  }`}
+                >
+                  {stockStatus.canBuy ? 'Agregar al carrito' : 'Agotado'}
+                </button>
+                <a
+                  href={whatsappLink(`Hola! Me interesa ${product.name}`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary text-center"
+                >
+                  Consultar
+                </a>
+              </div>
             </div>
           </div>
         </div>

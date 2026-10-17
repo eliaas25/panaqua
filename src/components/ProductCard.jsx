@@ -1,18 +1,10 @@
 import { formatPrice } from '../utils/format';
+import { getStockStatus } from '../utils/stock';
+import { useCart } from '../hooks/useCart';
 
 export default function ProductCard({ product, onProductClick }) {
-  const getAvailabilityColor = (availability) => {
-    switch (availability) {
-      case 'En stock':
-        return 'text-green-600';
-      case 'Pocas unidades':
-        return 'text-yellow-600';
-      case 'Agotado':
-        return 'text-red-600';
-      default:
-        return 'text-muted';
-    }
-  };
+  const { addItem } = useCart();
+  const stockStatus = getStockStatus(product.stock);
 
   return (
     <div className="card cursor-pointer group" onClick={() => onProductClick(product)}>
@@ -29,10 +21,12 @@ export default function ProductCard({ product, onProductClick }) {
             {product.category}
           </span>
         </div>
-        {/* Availability */}
+        {/* Stock badge */}
         <div className="absolute bottom-3 right-3">
-          <span className={`font-body text-xs ${getAvailabilityColor(product.availability)}`}>
-            {product.availability}
+          <span
+            className={`font-body text-xs px-2 py-1 rounded-sm bg-white/90 backdrop-blur-sm ${stockStatus.textColor}`}
+          >
+            {stockStatus.label}
           </span>
         </div>
       </div>
@@ -47,21 +41,19 @@ export default function ProductCard({ product, onProductClick }) {
           <p className="font-body text-xl font-semibold text-accent">
             {formatPrice(product.price)}
           </p>
-          <button className="text-text hover:text-accent transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addItem(product);
+            }}
+            disabled={!stockStatus.canBuy}
+            className={`font-body text-sm px-4 py-2 rounded-sm transition-colors ${
+              stockStatus.canBuy
+                ? 'bg-accent text-white hover:bg-accent-dark'
+                : 'bg-border text-muted cursor-not-allowed'
+            }`}
+          >
+            {stockStatus.canBuy ? 'Agregar' : 'Agotado'}
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { SORT_OPTIONS } from '../utils/sort';
 
 export default function CatalogControls({ searchQuery, onSearchChange, sortBy, onSortChange }) {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
+    <>
       {/* Search */}
       <div className="relative w-full sm:w-72">
         <svg
@@ -41,6 +41,6 @@ export default function CatalogControls({ searchQuery, onSearchChange, sortBy, o
           ))}
         </select>
       </div>
-    </div>
+    </>
   );
 }

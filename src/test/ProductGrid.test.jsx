@@ -1,18 +1,26 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ProductGrid from '../components/ProductGrid';
+import { CartProvider } from '../context/CartContext';
 import { products } from '../data/products';
+
+const renderGrid = (gridProps) =>
+  render(
+    <CartProvider>
+      <ProductGrid {...gridProps} onProductClick={() => {}} />
+    </CartProvider>
+  );
 
 describe('ProductGrid', () => {
   it('renders all products', () => {
-    render(<ProductGrid products={products} onProductClick={() => {}} />);
+    renderGrid({ products });
     products.forEach((product) => {
       expect(screen.getByText(product.name)).toBeInTheDocument();
     });
   });
 
   it('renders the correct number of product cards', () => {
-    render(<ProductGrid products={products} onProductClick={() => {}} />);
+    renderGrid({ products });
     const names = products.map((p) => p.name);
     names.forEach((name) => {
       expect(screen.getByText(name)).toBeInTheDocument();
@@ -20,13 +28,13 @@ describe('ProductGrid', () => {
   });
 
   it('shows empty state when no products', () => {
-    render(<ProductGrid products={[]} onProductClick={() => {}} />);
+    renderGrid({ products: [] });
     expect(screen.getByText('No se encontraron productos')).toBeInTheDocument();
   });
 
   it('renders filtered subset correctly', () => {
     const bags = products.filter((p) => p.category === 'bags');
-    render(<ProductGrid products={bags} onProductClick={() => {}} />);
+    renderGrid({ products: bags });
     bags.forEach((bag) => {
       expect(screen.getByText(bag.name)).toBeInTheDocument();
     });
@@ -34,5 +42,13 @@ describe('ProductGrid', () => {
     bolsos.forEach((bolso) => {
       expect(screen.queryByText(bolso.name)).not.toBeInTheDocument();
     });
+  });
+
+  it('shows stock badges', () => {
+    renderGrid({ products });
+    expect(screen.getAllByText('En stock').length).toBeGreaterThan(0);
+    expect(screen.getByText('¡Quedan 3 unidades!')).toBeInTheDocument();
+    expect(screen.getByText('¡Quedan 2 unidades!')).toBeInTheDocument();
+    expect(screen.getAllByText('Agotado').length).toBeGreaterThan(0);
   });
 });
