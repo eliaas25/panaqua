@@ -4,3 +4,9 @@ export function formatPrice(price) {
     currency: 'ARS',
   }).format(price);
 }
+
+export function formatShippingCost(cost) {
+  if (cost === null || cost === undefined) return 'A coordinar';
+  if (cost === 0) return 'Gratis';
+  return formatPrice(cost);
+}

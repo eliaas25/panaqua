@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.4.0] - 2026-10-17
+
+### Added
+- Carrito de compras: reducer + localStorage, drawer lateral, contador en navbar
+- Badges de stock en tarjetas y modal (verde/amarillo/rojo, umbral de 5 unidades)
+- Integración con Supabase: productos, categorías, métodos de pago y settings desde BD (fallback local si no hay credenciales)
+- Esquema SQL de 8 tablas con RLS + RPC `crear_pedido` (valida stock y precios del lado servidor) en `supabase/schema.sql`
+- Ruteo con HashRouter: `/` (home), `/checkout`, `/pedido/:numero`
+- Página de checkout: datos, retiro/envío con costo por zona, método de pago, validaciones y resumen
+- Página de confirmación: resumen del pedido, datos de transferencia (alias/CBU) y envío por WhatsApp con número de pedido
+- Zonas de envío (`src/data/shippingZones.js`): Rosario ciudad gratis, resto "A coordinar" (cotización Andreani referenciada en el archivo)
+- Esquema SQL idempotente (re-pegable sin duplicar datos) + script `supabase/fix-duplicados.sql`
+- Tests: 67 (Checkout, OrderConfirmation, shippingZones, carrito, stock)
+
+### Changed
+- Navbar, Footer y Hero navegan con scroll programático (compatibles con HashRouter)
+- Botón "Finalizar compra" del carrito habilitado → lleva al checkout
+- Hero: imagen con ancho máximo (antes ocupaba toda la columna)
+- Filtros, búsqueda y orden en una sola línea
+- Cursores `pointer` globales en botones, links y selects
+- Email de contacto copiable al portapapeles con feedback "¡Copiado!"
+- Modal de producto: scroll completo en mobile e imagen a todo el ancho
+
 ## [0.3.0] - 2026-10-17
 
 ### Added

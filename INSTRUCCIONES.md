@@ -17,11 +17,29 @@ Crea un archivo `.env` en la raíz del proyecto (basado en `.env.example`):
 VITE_WHATSAPP_NUMBER=549XXXXXXXXXX
 VITE_CONTACT_EMAIL=tu@email.com
 VITE_INSTAGRAM_URL=https://www.instagram.com/tu-usuario
+VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...anon...
 ```
 
 Los valores se centralizan en `src/config/site.js` (con fallbacks). **No** editar números en componentes.
 
-### 3. Iniciar Desarrollo
+Si faltan las variables de Supabase, el sitio funciona en modo local: muestra los productos de `src/data/products.js` y el checkout queda inactivo.
+
+### 3. Configurar Supabase (Base de Datos)
+
+1. Entrá a [supabase.com](https://supabase.com) → **New Project** (nombre `panaqua`, región South America, contraseña de BD guardada)
+2. Esperá ~2 min a que provisione
+3. **Project Settings → API** → copiá la **Project URL** y la **anon public key** al `.env`
+4. Andá a **SQL Editor → New query**, pegá todo el contenido de `supabase/schema.sql` y presioná **Run**
+5. Verificá que aparezcan las tablas en **Table Editor** (`products`, `orders`, `clientes`, etc.)
+
+El esquema crea:
+- 8 tablas con RLS habilitado (el anónimo solo lee catálogo/config y crea pedidos vía RPC)
+- Los 6 productos de ejemplo ya insertados
+- Secuencia de números de pedido (arranca en 1001)
+- Función `crear_pedido` que valida stock y precios del lado servidor
+
+### 4. Iniciar Desarrollo
 
 ```bash
 npm run dev
@@ -58,23 +76,12 @@ Esto abrirá el servidor de desarrollo en `http://localhost:5173/`
 
 ### Agregar Productos
 
-1. Abre `src/data/products.js`
-2. Agrega nuevos objetos al array `products`:
+Los productos viven en Supabase (tabla `products`): editálos desde el SQL Editor o, a futuro, desde el panel admin (M3). El archivo `src/data/products.js` queda como **fallback local** (y como fuente de las imágenes por `image_key`).
 
-```javascript
-{
-  id: 7,
-  name: "Nombre del Producto",
-  category: "bags", // "bags" o "bolsos"
-  price: 25000,
-  materials: [],
-  dimensions: "",
-  availability: "En stock", // "En stock", "Pocas unidades", "Agotado"
-  image: importFoto, // import desde src/assets/products/
-  description: "Descripción del producto",
-  featured: false
-}
-```
+Para agregar uno manualmente:
+
+1. Insertá la fila en la tabla `products` (columnas `nombre`, `descripcion`, `precio`, `stock`, `categoria_id`, `image_key`)
+2. Si es una foto nueva: subila a `src/assets/products/` y agregá el alias en `src/data/productImages.js`
 
 ### Cambiar Imágenes
 
@@ -102,7 +109,7 @@ npm run format:check
 # Ejecutar linting
 npm run lint
 
-# Ejecutar tests (27 tests)
+# Ejecutar tests (67 tests)
 npm test
 
 # Tests en modo watch
@@ -115,6 +122,13 @@ Push a `main` → GitHub Actions ejecuta lint + tests + build + deploy automáti
 
 Settings > Pages > Source: "GitHub Actions" (ya configurado).
 
+**Importante para producción:** agregá en Settings → Secrets and variables → Actions → Secrets:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+(el workflow los inyecta en el build; sin ellos la web publicada queda en modo local y el checkout no funciona)
+
 ## Estructura del Proyecto
 
 ```
@@ -122,15 +136,22 @@ panaqua/
 ├── public/
 │   ├── favicon.svg
 │   └── images/og-image.jpg
+├── supabase/
+│   └── schema.sql        # SQL completo para Supabase (pegar en SQL Editor)
 ├── src/
-│   ├── components/       # 11 componentes React
-│   ├── config/site.js    # contacto centralizado
-│   ├── data/products.js  # 6 productos + 2 categorías
-│   ├── utils/            # sort.js, format.js
+│   ├── components/       # 12 componentes React
+│   ├── pages/            # Home, Checkout, OrderConfirmation (ruteo con HashRouter)
+│   ├── services/shop.js  # acceso a Supabase con fallback local
+│   ├── lib/supabase.js   # cliente de Supabase
+│   ├── hooks/            # useCart, useCopyToClipboard, useScrollToSection
+│   ├── context/          # CartContext (estado del carrito)
+│   ├── config/           # site.js (contacto), payments.js (alias/CBU)
+│   ├── data/             # products.js (fallback), shippingZones.js, productImages.js
+│   ├── utils/            # sort.js, format.js, stock.js
+│   ├── test/             # 12 archivos de test
 │   ├── assets/           # logo.svg + 6 fotos
-│   ├── test/             # 6 archivos de test
-│   ├── App.jsx
-│   ├── main.jsx
+│   ├── App.jsx           # rutas: /, /checkout, /pedido/:numero
+│   ├── main.jsx          # HashRouter + StrictMode
 │   └── index.css
 ├── .env                  # Variables de entorno (gitignored)
 ├── .env.example          # Plantilla
@@ -140,24 +161,11 @@ panaqua/
 
 ## Próximos Pasos (Fase 2)
 
-Cuando estés listo para agregar funcionalidad de e-commerce:
-
-1. **Carrito de Compras**
-   - Usar localStorage para persistir el carrito
-   - Crear componentes: Cart, CartItem, CartSummary
-
-2. **Pasarela de Pagos**
-   - Integrar Mercado Pago
-   - Crear flujo de checkout
-
-3. **Sistema de Envíos**
-   - Integrar APIs de Andreani o Correo Argentino
-   - Calcular costos de envío
-
-4. **Panel de Administración**
-   - CRUD de productos
-   - Gestión de pedidos
-   - Reportes de ventas
+- [x] Carrito de compras (localStorage + drawer)
+- [x] Checkout con pedidos en Supabase + confirmación por WhatsApp
+- [ ] Precios reales de envío por zona (`src/data/shippingZones.js`)
+- [ ] M3: Panel de administración (login Supabase Auth, gestión de pedidos/estados, stock, CRUD de productos)
+- [ ] M4: Cierre de Fase 2 (ajustes finales y QA)
 
 ## Soporte
 

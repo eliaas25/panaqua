@@ -1,17 +1,25 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useCart } from '../hooks/useCart';
+import { useScrollToSection } from '../hooks/useScrollToSection';
 
 export default function Navbar({ onCartOpen }) {
   const [isOpen, setIsOpen] = useState(false);
   const { totalItems } = useCart();
+  const scrollTo = useScrollToSection();
 
   const navItems = [
-    { name: 'Inicio', href: '#' },
-    { name: 'Catálogo', href: '#catalogo' },
-    { name: 'Sobre Nosotros', href: '#sobre-nosotros' },
-    { name: 'Contacto', href: '#contacto' },
+    { name: 'Inicio', id: null },
+    { name: 'Catálogo', id: 'catalogo' },
+    { name: 'Sobre Nosotros', id: 'sobre-nosotros' },
+    { name: 'Contacto', id: 'contacto' },
   ];
+
+  const handleNav = (id) => {
+    setIsOpen(false);
+    scrollTo(id);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-bg/95 backdrop-blur-sm border-b border-border z-50">
@@ -19,7 +27,7 @@ export default function Navbar({ onCartOpen }) {
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#" className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3">
               <img
                 src={logo}
                 alt="Panaqua"
@@ -32,19 +40,19 @@ export default function Navbar({ onCartOpen }) {
               <span className="hidden font-display text-xl md:text-2xl text-text tracking-wide">
                 PANAQUA
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.name}
-                href={item.href}
+                onClick={() => handleNav(item.id)}
                 className="font-body text-sm text-muted hover:text-accent transition-colors duration-300 uppercase tracking-wider"
               >
                 {item.name}
-              </a>
+              </button>
             ))}
           </div>
 
@@ -100,14 +108,13 @@ export default function Navbar({ onCartOpen }) {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-border">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.name}
-                href={item.href}
-                className="block py-3 font-body text-muted hover:text-accent transition-colors"
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleNav(item.id)}
+                className="block w-full text-left py-3 font-body text-muted hover:text-accent transition-colors"
               >
                 {item.name}
-              </a>
+              </button>
             ))}
           </div>
         )}

@@ -1,9 +1,11 @@
 import { whatsappDisplay, contactEmail, instagramUrl } from '../config/site';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useScrollToSection } from '../hooks/useScrollToSection';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { copied: emailCopied, copy: copyEmail } = useCopyToClipboard();
+  const scrollTo = useScrollToSection();
 
   return (
     <footer className="bg-text text-white py-12">
@@ -37,33 +39,36 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="font-body text-white/70 hover:text-accent transition-colors">
+                <button
+                  onClick={() => scrollTo(null)}
+                  className="font-body text-white/70 hover:text-accent transition-colors"
+                >
                   Inicio
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#catalogo"
+                <button
+                  onClick={() => scrollTo('catalogo')}
                   className="font-body text-white/70 hover:text-accent transition-colors"
                 >
                   Catálogo
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#sobre-nosotros"
+                <button
+                  onClick={() => scrollTo('sobre-nosotros')}
                   className="font-body text-white/70 hover:text-accent transition-colors"
                 >
                   Sobre Nosotros
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#contacto"
+                <button
+                  onClick={() => scrollTo('contacto')}
                   className="font-body text-white/70 hover:text-accent transition-colors"
                 >
                   Contacto
-                </a>
+                </button>
               </li>
             </ul>
           </div>

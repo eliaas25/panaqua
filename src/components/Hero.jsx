@@ -1,6 +1,9 @@
 import bagFlower from '../assets/products/bag-flower.webp';
+import { useScrollToSection } from '../hooks/useScrollToSection';
 
 export default function Hero() {
+  const scrollTo = useScrollToSection();
+
   return (
     <section className="min-h-screen flex items-center pt-20">
       <div className="container-custom">
@@ -15,12 +18,15 @@ export default function Hero() {
               estilo y la calidad.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <a href="#catalogo" className="btn-primary text-center">
+              <button onClick={() => scrollTo('catalogo')} className="btn-primary text-center">
                 Ver Catálogo
-              </a>
-              <a href="#sobre-nosotros" className="btn-secondary text-center">
+              </button>
+              <button
+                onClick={() => scrollTo('sobre-nosotros')}
+                className="btn-secondary text-center"
+              >
                 Conocer Más
-              </a>
+              </button>
             </div>
           </div>
 

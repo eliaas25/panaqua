@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import { formatPrice } from '../utils/format';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { items, totalPrice, totalItems, removeItem, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -137,8 +139,14 @@ export default function CartDrawer({ isOpen, onClose }) {
             <p className="font-accent text-xs text-muted italic">
               El costo de envío se calcula en el siguiente paso
             </p>
-            <button className="btn-primary w-full opacity-50 cursor-not-allowed" disabled>
-              Finalizar compra (próximamente)
+            <button
+              className="btn-primary w-full"
+              onClick={() => {
+                onClose();
+                navigate('/checkout');
+              }}
+            >
+              Finalizar compra
             </button>
           </div>
         )}
