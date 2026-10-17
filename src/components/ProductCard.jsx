@@ -21,14 +21,6 @@ export default function ProductCard({ product, onProductClick }) {
             {product.category}
           </span>
         </div>
-        {/* Stock badge */}
-        <div className="absolute bottom-3 right-3">
-          <span
-            className={`font-body text-xs px-2 py-1 rounded-sm bg-white/90 backdrop-blur-sm ${stockStatus.textColor}`}
-          >
-            {stockStatus.label}
-          </span>
-        </div>
       </div>
 
       {/* Content */}

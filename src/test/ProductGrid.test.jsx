@@ -44,11 +44,10 @@ describe('ProductGrid', () => {
     });
   });
 
-  it('shows stock badges', () => {
+  it('does not show stock badges', () => {
     renderGrid({ products });
-    expect(screen.getAllByText('En stock').length).toBeGreaterThan(0);
-    expect(screen.getByText('¡Quedan 3 unidades!')).toBeInTheDocument();
-    expect(screen.getByText('¡Quedan 2 unidades!')).toBeInTheDocument();
-    expect(screen.getAllByText('Agotado').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/En stock/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Quedan/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Queda /)).not.toBeInTheDocument();
   });
 });

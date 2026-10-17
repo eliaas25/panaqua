@@ -83,15 +83,6 @@ export default function ProductModal({ product, onClose }) {
                     <p className="font-body text-sm text-muted">{product.dimensions}</p>
                   </div>
                 )}
-
-                <div>
-                  <h4 className="font-body text-sm font-semibold text-text uppercase tracking-wider mb-2">
-                    Disponibilidad
-                  </h4>
-                  <p className={`font-body text-sm ${stockStatus.textColor}`}>
-                    {stockStatus.label}
-                  </p>
-                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
