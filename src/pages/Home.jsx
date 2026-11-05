@@ -69,7 +69,11 @@ export default function Home() {
       <Contact />
 
       {/* Product Modal */}
-      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      <ProductModal
+        key={selectedProduct?.id}
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
     </>
   );
 }

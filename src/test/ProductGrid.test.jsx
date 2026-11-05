@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import ProductGrid from '../components/ProductGrid';
 import { CartProvider } from '../context/CartContext';
 import { products } from '../data/products';
@@ -12,6 +12,10 @@ const renderGrid = (gridProps) =>
   );
 
 describe('ProductGrid', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('renders all products', () => {
     renderGrid({ products });
     products.forEach((product) => {
@@ -49,5 +53,22 @@ describe('ProductGrid', () => {
     expect(screen.queryByText(/En stock/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Quedan/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Queda /)).not.toBeInTheDocument();
+  });
+
+  it('shows the added badge with quantity after adding a product', async () => {
+    renderGrid({ products });
+    const addButton = screen.getAllByText('Agregar')[0];
+    fireEvent.click(addButton);
+    expect(await screen.findByText('✓ Agregado ×1')).toBeInTheDocument();
+  });
+
+  it('updates the badge quantity when adding another unit', async () => {
+    const productsWithStock = products.map((p, i) => (i === 0 ? { ...p, stock: 5 } : p));
+    renderGrid({ products: productsWithStock });
+    const addButton = screen.getAllByText('Agregar')[0];
+    fireEvent.click(addButton);
+    expect(await screen.findByText('✓ Agregado ×1')).toBeInTheDocument();
+    fireEvent.click(addButton);
+    expect(await screen.findByText('✓ Agregado ×2')).toBeInTheDocument();
   });
 });

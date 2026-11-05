@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Distintivo "✓ Agregado ×N" en la tarjeta del producto mientras esté en el carrito (cantidad en vivo, con animación al aparecer y al cambiar)
+- Stepper de cantidad en el modal del producto: si no está en el carrito, elegís cuántas unidades llevar; si está, los ± modifican la cantidad al instante y bajar de 1 lo quita del carrito
+
+### Changed
+- Badges de stock con colores (verde/amarillo/rojo) y sección "Disponibilidad" del modal ocultados temporalmente
+- Stock real de 1 unidad por los 6 productos (fallback local y seeds SQL)
+
 ## [0.4.0] - 2026-10-17
 
 ### Added

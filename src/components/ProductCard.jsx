@@ -3,8 +3,10 @@ import { getStockStatus } from '../utils/stock';
 import { useCart } from '../hooks/useCart';
 
 export default function ProductCard({ product, onProductClick }) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const stockStatus = getStockStatus(product.stock);
+  const cartItem = items.find((item) => item.productId === product.id);
+  const quantityInCart = cartItem?.quantity ?? 0;
 
   return (
     <div className="card cursor-pointer group" onClick={() => onProductClick(product)}>
@@ -21,6 +23,17 @@ export default function ProductCard({ product, onProductClick }) {
             {product.category}
           </span>
         </div>
+        {/* Added-to-cart badge */}
+        {quantityInCart > 0 && (
+          <div className="absolute bottom-3 right-3 pointer-events-none">
+            <span
+              key={quantityInCart}
+              className="font-body text-xs px-2 py-1 rounded-sm bg-accent text-white animate-badge-pop"
+            >
+              {`✓ Agregado ×${quantityInCart}`}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content */}

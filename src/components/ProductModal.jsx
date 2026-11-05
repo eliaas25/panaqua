@@ -1,14 +1,40 @@
+import { useState } from 'react';
 import { whatsappLink } from '../config/site';
 import { formatPrice } from '../utils/format';
 import { getStockStatus } from '../utils/stock';
 import { useCart } from '../hooks/useCart';
 
 export default function ProductModal({ product, onClose }) {
-  const { addItem } = useCart();
+  const { items, addItem, updateQuantity, removeItem } = useCart();
+  const [localQuantity, setLocalQuantity] = useState(1);
 
   if (!product) return null;
 
   const stockStatus = getStockStatus(product.stock);
+  const cartItem = items.find((item) => item.productId === product.id);
+  const quantityInCart = cartItem?.quantity ?? 0;
+  const isInCart = quantityInCart > 0;
+  const quantity = isInCart ? quantityInCart : localQuantity;
+
+  const handleIncrease = () => {
+    if (isInCart) {
+      updateQuantity(product.id, quantityInCart + 1);
+    } else {
+      setLocalQuantity((q) => Math.min(q + 1, product.stock));
+    }
+  };
+
+  const handleDecrease = () => {
+    if (isInCart) {
+      if (quantityInCart <= 1) {
+        removeItem(product.id);
+      } else {
+        updateQuantity(product.id, quantityInCart - 1);
+      }
+    } else {
+      setLocalQuantity((q) => Math.max(1, q - 1));
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -85,19 +111,52 @@ export default function ProductModal({ product, onClose }) {
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => {
-                    addItem(product);
-                    onClose();
-                  }}
-                  disabled={!stockStatus.canBuy}
-                  className={`flex-1 text-center ${
-                    stockStatus.canBuy ? 'btn-primary' : 'btn-primary opacity-50 cursor-not-allowed'
-                  }`}
-                >
-                  {stockStatus.canBuy ? 'Agregar al carrito' : 'Agotado'}
-                </button>
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+                {/* Quantity stepper: si hay stock > 1, o si el producto ya está en el carrito */}
+                {(product.stock > 1 || isInCart) && (
+                  <div className="flex items-center justify-center border border-border rounded-sm">
+                    <button
+                      onClick={handleDecrease}
+                      disabled={!isInCart && quantity <= 1}
+                      aria-label="Restar cantidad"
+                      className="px-4 py-3 text-text hover:bg-bg disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      −
+                    </button>
+                    <span className="px-2 min-w-[2.5rem] text-center font-body text-sm text-text">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={handleIncrease}
+                      disabled={quantity >= product.stock}
+                      aria-label="Sumar cantidad"
+                      className="px-4 py-3 text-text hover:bg-bg disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+
+                {isInCart ? (
+                  <span className="flex-1 text-center font-body text-sm py-3 border border-accent text-accent rounded-sm">
+                    ✓ En el carrito
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => {
+                      addItem(product, localQuantity);
+                      onClose();
+                    }}
+                    disabled={!stockStatus.canBuy}
+                    className={`flex-1 text-center ${
+                      stockStatus.canBuy
+                        ? 'btn-primary'
+                        : 'btn-primary opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    {stockStatus.canBuy ? 'Agregar al carrito' : 'Agotado'}
+                  </button>
+                )}
                 <a
                   href={whatsappLink(`Hola! Me interesa ${product.name}`)}
                   target="_blank"

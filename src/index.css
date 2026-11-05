@@ -73,3 +73,18 @@
     @apply font-accent text-lg text-muted italic;
   }
 }
+
+@keyframes badge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 0.3s ease-out;
+}
