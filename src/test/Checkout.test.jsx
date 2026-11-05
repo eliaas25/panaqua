@@ -9,7 +9,7 @@ import { crearPedido } from '../services/shop';
 vi.mock('../services/shop', () => ({
   fetchProducts: vi.fn(async () => []),
   fetchCategories: vi.fn(async () => []),
-  fetchSettings: vi.fn(async () => ({ alias: 'mi.alias', cbu: '111', qrUrl: null })),
+  fetchSettings: vi.fn(async () => ({ alias: 'mi.alias', cbu: '111', razonSocial: '' })),
   fetchPaymentMethods: vi.fn(async () => [
     { id: 1, name: 'Transferencia' },
     { id: 2, name: 'Efectivo' },

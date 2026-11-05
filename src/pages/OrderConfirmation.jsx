@@ -160,6 +160,14 @@ export default function OrderConfirmation() {
                 <span className="font-body text-sm text-muted">CBU</span>
                 <span className="font-body text-sm text-text font-medium">{settings.cbu}</span>
               </div>
+              {settings.razonSocial && (
+                <div className="flex justify-between gap-3">
+                  <span className="font-body text-sm text-muted">Razón social</span>
+                  <span className="font-body text-sm text-text font-medium">
+                    {settings.razonSocial}
+                  </span>
+                </div>
+              )}
               <div className="flex justify-between gap-3">
                 <span className="font-body text-sm text-muted">Importe</span>
                 <span className="font-body text-sm text-accent font-semibold">
@@ -167,13 +175,6 @@ export default function OrderConfirmation() {
                 </span>
               </div>
             </div>
-            {settings.qrUrl && (
-              <img
-                src={settings.qrUrl}
-                alt="QR de pago"
-                className="w-48 h-48 mx-auto mt-4 rounded-sm"
-              />
-            )}
             <p className="font-accent text-sm text-muted italic mt-4 text-center">
               Enviá el comprobante por WhatsApp junto con tu número de pedido
             </p>

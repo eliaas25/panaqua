@@ -19,6 +19,7 @@ VITE_CONTACT_EMAIL=tu@email.com
 VITE_INSTAGRAM_URL=https://www.instagram.com/tu-usuario
 VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJ...anon...
+VITE_PAYMENT_RAZON_SOCIAL=        # opcional; manda la tabla settings
 ```
 
 Los valores se centralizan en `src/config/site.js` (con fallbacks). **No** editar números en componentes.
@@ -31,7 +32,9 @@ Si faltan las variables de Supabase, el sitio funciona en modo local: muestra lo
 2. Esperá ~2 min a que provisione
 3. **Project Settings → API** → copiá la **Project URL** y la **anon public key** al `.env`
 4. Andá a **SQL Editor → New query**, pegá todo el contenido de `supabase/schema.sql` y presioná **Run**
-5. Verificá que aparezcan las tablas en **Table Editor** (`products`, `orders`, `clientes`, etc.)
+5. Pegá también `supabase/admin.sql` (RLS para el panel admin + RPC `cambiar_estado_pedido` que descuenta/devuelve stock)
+6. **Authentication → Users → Add user**: creá el email y contraseña del administrador (Auto Confirm activado)
+7. Verificá que aparezcan las tablas en **Table Editor** (`products`, `orders`, `clientes`, etc.)
 
 El esquema crea:
 - 8 tablas con RLS habilitado (el anónimo solo lee catálogo/config y crea pedidos vía RPC)
@@ -76,7 +79,7 @@ Esto abrirá el servidor de desarrollo en `http://localhost:5173/`
 
 ### Agregar Productos
 
-Los productos viven en Supabase (tabla `products`): editálos desde el SQL Editor o, a futuro, desde el panel admin (M3). El archivo `src/data/products.js` queda como **fallback local** (y como fuente de las imágenes por `image_key`).
+Los productos viven en Supabase (tabla `products`): editálos desde el panel admin (`#/admin`) o desde el SQL Editor. El archivo `src/data/products.js` queda como **fallback local** (y como fuente de las imágenes por `image_key`).
 
 Para agregar uno manualmente:
 
@@ -109,7 +112,7 @@ npm run format:check
 # Ejecutar linting
 npm run lint
 
-# Ejecutar tests (67 tests)
+# Ejecutar tests (88 tests)
 npm test
 
 # Tests en modo watch
@@ -137,20 +140,23 @@ panaqua/
 │   ├── favicon.svg
 │   └── images/og-image.jpg
 ├── supabase/
-│   └── schema.sql        # SQL completo para Supabase (pegar en SQL Editor)
+│   ├── schema.sql        # SQL completo para Supabase (pegar en SQL Editor)
+│   └── admin.sql         # RLS admin + RPC cambiar_estado_pedido (pegar una vez)
 ├── src/
 │   ├── components/       # 12 componentes React
 │   ├── pages/            # Home, Checkout, OrderConfirmation (ruteo con HashRouter)
+│   ├── pages/admin/      # AdminLogin, AdminLayout, AdminOrders, AdminProducts, AdminReports
 │   ├── services/shop.js  # acceso a Supabase con fallback local
+│   ├── services/admin.js # pedidos y productos del panel admin
 │   ├── lib/supabase.js   # cliente de Supabase
-│   ├── hooks/            # useCart, useCopyToClipboard, useScrollToSection
+│   ├── hooks/            # useCart, useCopyToClipboard, useScrollToSection, useAdminAuth
 │   ├── context/          # CartContext (estado del carrito)
-│   ├── config/           # site.js (contacto), payments.js (alias/CBU)
+│   ├── config/           # site.js (contacto), payments.js (alias/CBU/razón social)
 │   ├── data/             # products.js (fallback), shippingZones.js, productImages.js
-│   ├── utils/            # sort.js, format.js, stock.js
-│   ├── test/             # 12 archivos de test
+│   ├── utils/            # sort.js, format.js, stock.js, orderStatus.js
+│   ├── test/             # 16 archivos de test
 │   ├── assets/           # logo.svg + 6 fotos
-│   ├── App.jsx           # rutas: /, /checkout, /pedido/:numero
+│   ├── App.jsx           # rutas: /, /checkout, /pedido/:numero, /admin
 │   ├── main.jsx          # HashRouter + StrictMode
 │   └── index.css
 ├── .env                  # Variables de entorno (gitignored)
@@ -159,12 +165,20 @@ panaqua/
 └── vite.config.js
 ```
 
+## Panel de Administración (M3)
+
+- **URL:** `#/admin` (login con el usuario creado en Authentication → Users)
+- **Pedidos:** filtros por estado, detalle expandible y transiciones con confirmación (pagar descuenta stock; deshacer un pago lo devuelve)
+- **Productos:** precio y stock editables por fila, toggles de activo/destacado
+- **Reportes:** ingresos confirmados, pedidos por cobrar, totales del mes y top productos
+- Requiere pegar `supabase/admin.sql` y crear el usuario admin (ver paso 3 de Supabase)
+
 ## Próximos Pasos (Fase 2)
 
 - [x] Carrito de compras (localStorage + drawer)
 - [x] Checkout con pedidos en Supabase + confirmación por WhatsApp
-- [ ] Precios reales de envío por zona (`src/data/shippingZones.js`)
-- [ ] M3: Panel de administración (login Supabase Auth, gestión de pedidos/estados, stock, CRUD de productos)
+- [x] M3: Panel de administración (login, pedidos/estados, productos, reportes)
+- [ ] Precios reales de envío por zona (Andreani) en `src/data/shippingZones.js`
 - [ ] M4: Cierre de Fase 2 (ajustes finales y QA)
 
 ## Soporte

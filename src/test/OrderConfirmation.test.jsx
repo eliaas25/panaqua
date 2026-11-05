@@ -8,7 +8,11 @@ vi.mock('../services/shop', () => ({
   fetchCategories: vi.fn(async () => []),
   fetchPaymentMethods: vi.fn(async () => []),
   crearPedido: vi.fn(),
-  fetchSettings: vi.fn(async () => ({ alias: 'cm.camila.mercado', cbu: '00000031', qrUrl: null })),
+  fetchSettings: vi.fn(async () => ({
+    alias: 'cm.camila.mercado',
+    cbu: '00000031',
+    razonSocial: 'Panaqua SRL',
+  })),
 }));
 
 const order = {
@@ -47,6 +51,7 @@ describe('OrderConfirmation', () => {
     expect(screen.getByText(/2× Bag Tini/)).toBeInTheDocument();
     expect(await screen.findByText('cm.camila.mercado')).toBeInTheDocument();
     expect(screen.getByText('00000031')).toBeInTheDocument();
+    expect(screen.getByText('Panaqua SRL')).toBeInTheDocument();
 
     const waLink = await screen.findByRole('link', { name: 'Enviar por WhatsApp' });
     expect(waLink.href).toContain('wa.me');

@@ -74,7 +74,7 @@ export async function fetchSettings() {
   const local = {
     alias: payments.alias,
     cbu: payments.cbu,
-    qrUrl: payments.qrUrl,
+    razonSocial: payments.razonSocial,
   };
   if (!supabase) return local;
   try {
@@ -84,7 +84,7 @@ export async function fetchSettings() {
     return {
       alias: map.alias || local.alias,
       cbu: map.cbu || local.cbu,
-      qrUrl: map.qr_url || local.qrUrl,
+      razonSocial: map.razon_social || local.razonSocial,
     };
   } catch {
     return local;

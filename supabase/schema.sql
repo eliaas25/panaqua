@@ -143,8 +143,7 @@ create table if not exists settings (
 insert into settings (key, value) values
   ('alias', 'cm.camila.mercado'),
   ('cbu', '0000003100052648667954'),
-  ('qr_url', null),
-  ('precio_envio', null)
+  ('razon_social', '')
 on conflict (key) do nothing;
 
 -- ============================================================

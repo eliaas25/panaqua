@@ -12,9 +12,10 @@ describe('shippingZones', () => {
     }
   });
 
-  it('Rosario ciudad es gratis', () => {
-    const rosario = shippingZones.find((z) => z.id === 'rosario-ciudad');
-    expect(rosario.price).toBe(0);
+  it('por ahora solo existe la zona Rosario ciudad, gratis', () => {
+    expect(shippingZones).toHaveLength(1);
+    expect(shippingZones[0].id).toBe('rosario-ciudad');
+    expect(shippingZones[0].price).toBe(0);
   });
 
   it('devuelve el precio de la zona conocida (puede ser null)', () => {
