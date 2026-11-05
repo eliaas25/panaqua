@@ -2,13 +2,16 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-04
+
 ### Added
+- Sección **Destacados** en el home con los productos marcados como destacados (gestionable desde el panel admin); se oculta sola si no hay ninguno
 - Distintivo "✓ Agregado ×N" en la tarjeta del producto mientras esté en el carrito (cantidad en vivo, con animación al aparecer y al cambiar)
 - Stepper de cantidad en el modal del producto: si no está en el carrito, elegís cuántas unidades llevar; si está, los ± modifican la cantidad al instante y bajar de 1 lo quita del carrito
 - Panel de administración (M3) en `#/admin`: login con Supabase Auth, listado de pedidos con filtros por estado y transiciones (pagar, enviar, entregar, cancelar), gestión de productos (precio, stock, activo, destacado) y reportes (ingresos, pedidos del mes, top productos)
 - RPC `cambiar_estado_pedido` (`supabase/admin.sql`): valida las transiciones de estado y descuenta/devuelve stock al pasar por `pagado`
-- Razón social en la confirmación de transferencia (tabla `settings` o `VITE_PAYMENT_RAZON_SOCIAL`)
-- Tests: 88 (nuevos: `orderStatus`, `AdminLogin`, `AdminOrders`)
+- Razón social en la confirmación de transferencia (tabla `settings` o `VITE_PAYMENT_RAZON_SOCIAL`, fallback "Camila Morant")
+- Tests: 91 (nuevos: `orderStatus`, `AdminLogin`, `AdminOrders`, `FeaturedSection`)
 
 ### Changed
 - Badges de stock con colores (verde/amarillo/rojo) y sección "Disponibilidad" del modal ocultados temporalmente

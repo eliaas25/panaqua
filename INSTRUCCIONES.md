@@ -112,7 +112,7 @@ npm run format:check
 # Ejecutar linting
 npm run lint
 
-# Ejecutar tests (88 tests)
+# Ejecutar tests (91 tests)
 npm test
 
 # Tests en modo watch
@@ -143,7 +143,7 @@ panaqua/
 │   ├── schema.sql        # SQL completo para Supabase (pegar en SQL Editor)
 │   └── admin.sql         # RLS admin + RPC cambiar_estado_pedido (pegar una vez)
 ├── src/
-│   ├── components/       # 12 componentes React
+│   ├── components/       # 13 componentes React
 │   ├── pages/            # Home, Checkout, OrderConfirmation (ruteo con HashRouter)
 │   ├── pages/admin/      # AdminLogin, AdminLayout, AdminOrders, AdminProducts, AdminReports
 │   ├── services/shop.js  # acceso a Supabase con fallback local
@@ -154,7 +154,7 @@ panaqua/
 │   ├── config/           # site.js (contacto), payments.js (alias/CBU/razón social)
 │   ├── data/             # products.js (fallback), shippingZones.js, productImages.js
 │   ├── utils/            # sort.js, format.js, stock.js, orderStatus.js
-│   ├── test/             # 16 archivos de test
+│   ├── test/             # 17 archivos de test
 │   ├── assets/           # logo.svg + 6 fotos
 │   ├── App.jsx           # rutas: /, /checkout, /pedido/:numero, /admin
 │   ├── main.jsx          # HashRouter + StrictMode
@@ -169,7 +169,7 @@ panaqua/
 
 - **URL:** `#/admin` (login con el usuario creado en Authentication → Users)
 - **Pedidos:** filtros por estado, detalle expandible y transiciones con confirmación (pagar descuenta stock; deshacer un pago lo devuelve)
-- **Productos:** precio y stock editables por fila, toggles de activo/destacado
+- **Productos:** precio y stock editables por fila, toggles de activo/destacado (el destacado se muestra en la sección Destacados del home)
 - **Reportes:** ingresos confirmados, pedidos por cobrar, totales del mes y top productos
 - Requiere pegar `supabase/admin.sql` y crear el usuario admin (ver paso 3 de Supabase)
 

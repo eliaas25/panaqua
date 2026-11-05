@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
+import FeaturedSection from '../components/FeaturedSection';
 import ProductGrid from '../components/ProductGrid';
 import CategoryFilter from '../components/CategoryFilter';
 import CatalogControls from '../components/CatalogControls';
@@ -34,6 +35,8 @@ export default function Home() {
   return (
     <>
       <Hero />
+
+      <FeaturedSection products={products} onProductClick={setSelectedProduct} />
 
       {/* Catalog Section */}
       <section id="catalogo" className="py-20 scroll-mt-20">
